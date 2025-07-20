@@ -1,0 +1,27 @@
+# token.po - Patato language ke token types
+
+token LET = "LET"
+token FUNC = "FUNC"
+token RETURN = "RETURN"
+
+token IDENT = "IDENT"         # x, y, abc
+token NUMBER = "NUMBER"       # 123, 45
+
+token ASSIGN = "="
+token PLUS = "+"
+token MINUS = "-"
+token MUL = "*"
+token DIV = "/"
+
+token LPAREN = "("
+token RPAREN = ")"
+token LBRACE = "{"
+token RBRACE = "}"
+
+token COMMA = ","
+token SEMICOLON = ";"
+
+token STRING = "STRING"
+token COMMENT = "#"
+
+token EOF = "EOF"  # End of File
