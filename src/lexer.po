@@ -1,2 +1,135 @@
-Input: let x = 10
-Tokens: [LET, IDENT(x), ASSIGN, NUMBER(10)]
+# lexer.po - Patato source code ko tokens me todta hai
+
+use "token.po"
+
+func is_letter(ch) {
+  return (ch >= "a" and ch <= "z") or (ch >= "A" and ch <= "Z") or (ch == "_")
+}
+
+func is_digit(ch) {
+  return (ch >= "0" and ch <= "9")
+}
+
+class Lexer {
+  input = ""
+  pos = 0
+  current_char = ""
+
+  func init(code) {
+    this.input = code
+    this.pos = 0
+    this.current_char = code[0]
+  }
+
+  func advance() {
+    this.pos += 1
+    if this.pos < len(this.input) {
+      this.current_char = this.input[this.pos]
+    } else {
+      this.current_char = null
+    }
+  }
+
+  func skip_whitespace() {
+    while this.current_char == " " or this.current_char == "\n" {
+      this.advance()
+    }
+  }
+
+  func next_token() {
+    this.skip_whitespace()
+
+    if this.current_char == null {
+      return [EOF, ""]
+    }
+
+    # identifiers and keywords
+    if is_letter(this.current_char) {
+      let start = this.pos
+      while is_letter(this.current_char) or is_digit(this.current_char) {
+        this.advance()
+      }
+      let word = this.input[start:this.pos]
+      if word == "let" {
+        return [LET, word]
+      }
+      if word == "func" {
+        return [FUNC, word]
+      }
+      if word == "return" {
+        return [RETURN, word]
+      }
+      return [IDENT, word]
+    }
+
+    # numbers
+    if is_digit(this.current_char) {
+      let start = this.pos
+      while is_digit(this.current_char) {
+        this.advance()
+      }
+      return [NUMBER, this.input[start:this.pos]]
+    }
+
+    # single character tokens
+    if this.current_char == "=" {
+      this.advance()
+      return [ASSIGN, "="]
+    }
+
+    if this.current_char == "+" {
+      this.advance()
+      return [PLUS, "+"]
+    }
+
+    if this.current_char == "-" {
+      this.advance()
+      return [MINUS, "-"]
+    }
+
+    if this.current_char == "*" {
+      this.advance()
+      return [MUL, "*"]
+    }
+
+    if this.current_char == "/" {
+      this.advance()
+      return [DIV, "/"]
+    }
+
+    if this.current_char == "(" {
+      this.advance()
+      return [LPAREN, "("]
+    }
+
+    if this.current_char == ")" {
+      this.advance()
+      return [RPAREN, ")"]
+    }
+
+    if this.current_char == "{" {
+      this.advance()
+      return [LBRACE, "{"]
+    }
+
+    if this.current_char == "}" {
+      this.advance()
+      return [RBRACE, "}"]
+    }
+
+    if this.current_char == "," {
+      this.advance()
+      return [COMMA, ","]
+    }
+
+    if this.current_char == ";" {
+      this.advance()
+      return [SEMICOLON, ";"]
+    }
+
+    # default: unknown token
+    let ch = this.current_char
+    this.advance()
+    return ["ILLEGAL", ch]
+  }
+}
