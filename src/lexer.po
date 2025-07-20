@@ -1,1 +1,2 @@
-
+Input: let x = 10
+Tokens: [LET, IDENT(x), ASSIGN, NUMBER(10)]
