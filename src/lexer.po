@@ -121,7 +121,6 @@ class Lexer {
       this.advance()
       return [COMMA, ","]
     }
-
     if this.current_char == ";" {
       this.advance()
       return [SEMICOLON, ";"]
